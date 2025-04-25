@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Patient | HMS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --dark: #0f172a;
+      --darker: #020617;
+      --light: #f8fafc;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(rgba(2, 6, 23, 0.95), rgba(2, 6, 23, 0.98));
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    
+    .card {
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th {
+      background-color: #1e293b;
+      color: #7dd3fc;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #1e293b;
+      font-size: 0.875rem;
+    }
+    
+    tr:hover {
+      background-color: rgba(30, 41, 59, 0.5);
+    }
+    
+    .search-input {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      color: #f8fafc;
+      transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .delete-btn {
+      background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+      transition: all 0.3s ease;
+    }
+    
+    .delete-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    }
+    
+    .pid-input {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      color: #f8fafc;
+    }
+    
+    .pid-input:focus {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+    
+    .flash-message {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="py-8 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-white">Delete Patient Record</h1>
+        <p class="text-slate-400">Remove patient records from the system</p>
+      </div>
+    </div>
+
+    <div class="card mb-6">
+      <div class="mb-6">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search by PID, First Name or Last Name..." 
+          class="search-input w-full max-w-md px-4 py-2 rounded-lg focus:outline-none"
+        />
+      </div>
+
+      <div class="table-container">
+        <table id="patient-table">
+          <thead>
+            <tr>
+              <th>Patient ID</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Age</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-300"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <form method="POST" action="/delete" onsubmit="return confirmDelete()" class="space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <div class="flex-1">
+            <label for="pid" class="block text-sm font-medium text-slate-300 mb-1">Patient ID</label>
+            <input 
+              type="text" 
+              name="pid" 
+              id="pid" 
+              required 
+              class="pid-input w-full px-4 py-2 rounded-lg focus:outline-none"
+              placeholder="Enter patient ID to delete"
+            />
+          </div>
+          <div class="md:self-end">
+            <button 
+              type="submit" 
+              class="delete-btn px-6 py-2.5 text-white font-medium rounded-lg focus:outline-none"
+            >
+              Delete Patient Record
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div id="flash-message" class="flash-message mt-4 text-center"></div>
+    </div>
+
+    <div class="text-center text-slate-500 text-sm mt-8">
+      © Heart Attack Management System
+    </div>
+  </div>
+
+  <script>
+    let allPatients = [];
+
+    fetch('/all_tables')
+      .then(res => res.json())
+      .then(data => {
+        const patientTable = data.find(table => table.name === 'patient');
+        if (patientTable && patientTable.data.length > 0) {
+          allPatients = patientTable.data;
+          renderPatients(allPatients);
+        } else {
+          document.querySelector("#patient-table tbody").innerHTML = `
+            <tr>
+              <td colspan="5" class="py-8 text-center text-slate-400">
+                No patient records found
+              </td>
+            </tr>
+          `;
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching patient data:', error);
+        document.querySelector("#patient-table tbody").innerHTML = `
+          <tr>
+            <td colspan="5" class="py-8 text-center text-red-400">
+              Error loading patient data. Please try again.
+            </td>
+          </tr>
+        `;
+      });
+
+    function renderPatients(data) {
+      const tbody = document.querySelector("#patient-table tbody");
+      tbody.innerHTML = "";
+      
+      if (data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-8 text-center text-slate-400">
+              No matching patients found
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      data.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-900/50 transition-colors";
+        tr.innerHTML = `
+          <td class="font-medium">${row.PID}</td>
+          <td>${row.FNAME}</td>
+          <td>${row.LNAME}</td>
+          <td>${row.AGE}</td>
+          <td>${row.CONTACT}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById("search-input").addEventListener("input", (e) => {
+      const keyword = e.target.value.toLowerCase();
+      const filtered = allPatients.filter(p =>
+        p.PID.toLowerCase().includes(keyword) ||
+        (p.FNAME && p.FNAME.toLowerCase().includes(keyword)) ||
+        (p.LNAME && p.LNAME.toLowerCase().includes(keyword))
+      );
+      renderPatients(filtered);
+    });
+
+    function confirmDelete() {
+      const pid = document.getElementById("pid").value;
+      return confirm(`Are you absolutely sure you want to delete patient with ID: ${pid}?\nThis action cannot be undone.`);
+    }
+
+    // Check for success message in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('deleted') === 'true') {
+      const flashMsg = document.getElementById("flash-message");
+      flashMsg.innerHTML = `
+        <div class="inline-flex items-center bg-green-900/30 text-green-400 text-sm font-medium px-4 py-2 rounded-lg border border-green-800/50">
+          <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          Patient record deleted successfully
+        </div>
+      `;
+      
+      // Clear after 5 seconds
+      setTimeout(() => {
+        flashMsg.innerHTML = '';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
