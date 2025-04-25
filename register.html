@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: 
+        /* Dark overlay for contrast */
+        linear-gradient(rgba(250, 250, 255, 0.925), rgba(253, 253, 255, 0.9)),
+        /* Medical background image */
+        url('https://images.unsplash.com/photo-1581595219315-a187dd40c322?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+    .input {
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 8px;
+      background: rgba(45, 45, 45, 0.8);
+      border: 2px solid #3a3a3a;
+      border-radius: 10px;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+    .input:focus {
+      border-color: #dc3545;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+      background: rgba(51, 51, 51, 0.9);
+    }
+    .card {
+      background: rgba(37, 37, 37, 0.9);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+      border-left: 4px solid #dc3545;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #dc3545;
+    }
+    textarea.input {
+      min-height: 100px;
+      resize: vertical;
+    }
+    select.input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+    }
+    .readonly-input {
+      background: rgba(60, 60, 60, 0.8) !important;
+      color: #cccccc !important;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body class="py-12 px-4">
+  <div class="max-w-5xl mx-auto space-y-10">
+    <h2 class="text-4xl font-Sauvage text-center text-black">
+      <span class="text-red-500"></span> Patient Registration Form
+      <span class="text-red-500"></span>
+    </h2>
+
+    <form id="patientForm" class="space-y-8">
+
+      <!-- Patient Details -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          Patient Details
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Patient ID</label>
+            <input type="text" name="pid" placeholder="Enter patient ID" required class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">First Name</label>
+            <input type="text" name="fname" placeholder="Enter first name" required class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Last Name</label>
+            <input type="text" name="lname" placeholder="Enter last name" required class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Age</label>
+            <input type="number" name="age" placeholder="Enter age" required class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Date of Birth</label>
+            <input type="date" name="dob" required class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Gender</label>
+            <select name="gender" class="input" required>
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-300">Address</label>
+            <input type="text" name="address" placeholder="Enter address" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Contact</label>
+            <input type="text" name="contact" placeholder="Enter contact" class="input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Lifestyle -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Lifestyle Factors
+        </h3>
+        <div class="grid grid-cols-1 gap-4">
+          <label class="checkbox-label">
+            <input type="checkbox" name="smoking_status" />
+            <span class="text-gray-300"> Smoking</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="alcohol_consumption" />
+            <span class="text-gray-300"> Alcohol Consumption</span>
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="drug_intake" />
+            <span class="text-gray-300"> Drug Use</span>
+          </label>
+          <div>
+            <label class="text-gray-300"> Physical Activity</label>
+            <input type="text" name="physical_activity" placeholder="Describe physical activity" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300"> Diet Preferences</label>
+            <input type="text" name="diet_preferences" placeholder="Describe diet preferences" class="input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          Emergency Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Emergency Contact</label>
+            <input type="text" name="emergency_contact" placeholder="Enter emergency contact" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Preferred Hospital</label>
+            <select name="preferredHospital" id="hospitalDropdown" class="input">
+              <option value="">Select a hospital</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-300">Hospital Contact</label>
+            <input type="text" name="HOSNO" id="hospitalContact" placeholder="Auto-filled based on selection" class="input readonly-input" readonly />
+          </div>
+         
+        </div>
+      </div>
+
+      <!-- Doctor Info -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Assigned Doctor
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Doctor</label>
+            <select name="did" id="doctorDropdown" class="input" required>
+              <option value="">Select a doctor</option>
+              <!-- Options will be populated by JavaScript -->
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-300">Doctor Contact</label>
+            <input type="text" name="DCONTACT" id="doctorContact" placeholder="Auto-filled based on selection" class="input readonly-input" readonly />
+          </div>
+          <div>
+            <label class="text-gray-300">Hospital Name</label>
+            <input type="text" name="HNAME" id="doctorHospital" placeholder="Auto-filled based on selection" class="input readonly-input" readonly />
+          </div>
+        
+        </div>
+      </div>
+
+      <!-- Medical Info -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Medical Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Body Weight (kg)</label>
+            <input type="number" name="bodyweight" placeholder="Enter weight in kg" class="input" id="bodyweight" />
+          </div>
+          <div>
+            <label class="text-gray-300">Height (cm)</label>
+            <input type="number" name="height" placeholder="Enter height in cm" class="input" id="height" />
+          </div>
+          <div>
+            <label class="text-gray-300">BMI</label>
+            <input type="number" step="0.01" name="bmi" placeholder="Auto-calculated" class="input bg-gray-800" id="bmi" readonly />
+          </div>
+          <div>
+            <label class="text-gray-300">Blood Type</label>
+            <input type="text" name="bloodtype" placeholder="Enter blood type" class="input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Patient History
+        </h3>
+       
+        <div>
+          <label class="text-gray-300">Medical History</label>
+          <textarea name="medical_history" placeholder="Enter medical history" class="input mb-4" rows="3"></textarea>
+        </div>
+        <div>
+          <label class="text-gray-300">Family History</label>
+          <textarea name="family_history" placeholder="Enter family history" class="input" rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- Treatment -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          Treatment Plan
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Treatment Plan</label>
+            <input type="text" name="treatment_plan" placeholder="Enter treatment plan" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Monitoring Data</label>
+            <input type="text" name="monitoring_data" placeholder="Enter monitoring data" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Surgery Details</label>
+            <input type="text" name="surgery_details" placeholder="Enter surgery details" class="input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" class="px-10 py-4 bg-gradient-to-r from-red-600 to-red-800 text-white text-lg font-bold rounded-full shadow-lg hover:from-red-700 hover:to-red-900 transition duration-300 transform hover:scale-105 hover:shadow-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          Submit Patient Data
+        </button>
+      </div>
+
+      <div id="responseMsg" class="mt-6 text-center text-base font-medium"></div>
+    </form>
+  </div>
+
+  <script>
+    // Doctor data from your table
+    const doctors = [
+      { id: 1, name: "Dr. Anil Mehta", contact: "9876543210", hospitalId: "H001", hospital: "Apollo Hospital" },
+      { id: 2, name: "Dr. Ritu Sharma", contact: "9876543211", hospitalId: "H002", hospital: "Fortis Healthcare" },
+      { id: 3, name: "Dr. Vikram Patel", contact: "9876543212", hospitalId: "H003", hospital: "AIIMS Delhi" },
+      { id: 4, name: "Dr. Neha Bansal", contact: "9876543213", hospitalId: "H004", hospital: "Max Hospital" },
+      { id: 5, name: "Dr. Arjun Rao", contact: "9876543214", hospitalId: "H005", hospital: "Medanta Medicity" },
+      { id: 6, name: "Dr. Priya Nair", contact: "9876543215", hospitalId: "H006", hospital: "Columbia Asia" },
+      { id: 7, name: "Dr. Karan Gupta", contact: "9876543216", hospitalId: "H007", hospital: "Narayana Health" },
+      { id: 8, name: "Dr. Meera Joshi", contact: "9876543217", hospitalId: "H008", hospital: "Lilavati Hospital" },
+      { id: 9, name: "Dr. Rajeev Das", contact: "9876543218", hospitalId: "H009", hospital: "Kokilaben Hospital" },
+      { id: 10, name: "Dr. Sneha Iyer", contact: "9876543219", hospitalId: "H010", hospital: "Manipal Hospital" },
+      { id: 11, name: "Dr. Suresh Kumar", contact: "9876543220", hospitalId: "H011", hospital: "Ruby Hall Clinic" },
+      { id: 12, name: "Dr. Ananya Sen", contact: "9876543221", hospitalId: "H012", hospital: "Care Hospitals" },
+      { id: 13, name: "Dr. Imran Qureshi", contact: "9876543222", hospitalId: "H013", hospital: "Sunshine Hospital" },
+      { id: 14, name: "Dr. Kavita Menon", contact: "9876543223", hospitalId: "H014", hospital: "Cloudnine Hospital" },
+      { id: 15, name: "Dr. Nikhil Jain", contact: "9876543224", hospitalId: "H015", hospital: "Sir Ganga Ram Hospital" },
+      { id: 16, name: "Dr. Pooja Mishra", contact: "9876543225", hospitalId: "H016", hospital: "Jehangir Hospital" },
+      { id: 17, name: "Dr. Ashok Verma", contact: "9876543226", hospitalId: "H017", hospital: "Tata Memorial Hospital" },
+      { id: 18, name: "Dr. Radhika Shetty", contact: "9876543227", hospitalId: "H018", hospital: "Saifee Hospital" },
+      { id: 19, name: "Dr. Harsh Singh", contact: "9876543228", hospitalId: "H019", hospital: "Breach Candy Hospital" },
+      { id: 20, name: "Dr. Alok Bhatt", contact: "9876543229", hospitalId: "H020", hospital: "Hinduja Hospital" }
+    ];
+
+    // Hospital data from your table
+    const hospitals = [
+      { id: "H001", name: "Apollo Hospital", contact: "011-2223344", location: "Delhi, India" },
+      { id: "H002", name: "Fortis Healthcare", contact: "011-2233445", location: "Gurgaon, India" },
+      { id: "H003", name: "AIIMS Delhi", contact: "011-2233446", location: "Delhi, India" },
+      { id: "H004", name: "Max Hospital", contact: "011-2233447", location: "Noida, India" },
+      { id: "H005", name: "Medanta Medicity", contact: "011-2233448", location: "Gurgaon, India" },
+      { id: "H006", name: "Columbia Asia", contact: "011-2233449", location: "Bangalore, India" },
+      { id: "H007", name: "Narayana Health", contact: "011-2233450", location: "Bangalore, India" },
+      { id: "H008", name: "Lilavati Hospital", contact: "011-2233451", location: "Mumbai, India" },
+      { id: "H009", name: "Kokilaben Hospital", contact: "011-2233452", location: "Mumbai, India" },
+      { id: "H010", name: "Manipal Hospital", contact: "011-2233453", location: "Bangalore, India" },
+      { id: "H011", name: "Ruby Hall Clinic", contact: "011-2233454", location: "Pune, India" },
+      { id: "H012", name: "Care Hospitals", contact: "011-2233455", location: "Hyderabad, India" },
+      { id: "H013", name: "Sunshine Hospital", contact: "011-2233456", location: "Hyderabad, India" },
+      { id: "H014", name: "Cloudnine Hospital", contact: "011-2233457", location: "Chennai, India" },
+      { id: "H015", name: "Sir Ganga Ram Hospital", contact: "011-2233458", location: "Delhi, India" },
+      { id: "H016", name: "Jehangir Hospital", contact: "011-2233459", location: "Pune, India" },
+      { id: "H017", name: "Tata Memorial Hospital", contact: "011-2233460", location: "Mumbai, India" },
+      { id: "H018", name: "Saifee Hospital", contact: "011-2233461", location: "Mumbai, India" },
+      { id: "H019", name: "Breach Candy Hospital", contact: "011-2233462", location: "Mumbai, India" },
+      { id: "H020", name: "Hinduja Hospital", contact: "011-2233463", location: "Mumbai, India" }
+    ];
+
+    // Populate dropdowns on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const doctorDropdown = document.getElementById('doctorDropdown');
+      const hospitalDropdown = document.getElementById('hospitalDropdown');
+      
+      // Populate doctor dropdown
+      doctors.forEach(doctor => {
+        const option = document.createElement('option');
+        option.value = doctor.id;
+        option.textContent = `${doctor.id} - ${doctor.name} (${doctor.hospital})`;
+        option.setAttribute('data-hospital-id', doctor.hospitalId);
+        doctorDropdown.appendChild(option);
+      });
+      
+      // Populate hospital dropdown
+      hospitals.forEach(hospital => {
+        const option = document.createElement('option');
+        option.value = hospital.id;
+        option.textContent = `${hospital.id} - ${hospital.name} (${hospital.location})`;
+        hospitalDropdown.appendChild(option);
+      });
+    });
+
+    // Update doctor-related fields when selection changes
+    document.getElementById('doctorDropdown').addEventListener('change', function() {
+      const selectedId = this.value;
+      const doctorContact = document.getElementById('doctorContact');
+      const doctorHospital = document.getElementById('doctorHospital');
+      const doctorHospitalLocation = document.getElementById('doctorHospitalLocation');
+      
+      if (selectedId) {
+        const selectedDoctor = doctors.find(d => d.id == selectedId);
+        if (selectedDoctor) {
+          doctorContact.value = selectedDoctor.contact;
+          doctorHospital.value = selectedDoctor.hospital;
+          
+          // Find and display hospital details
+          const doctorHospitalData = hospitals.find(h => h.id === selectedDoctor.hospitalId);
+          if (doctorHospitalData) {
+            doctorHospitalLocation.value = doctorHospitalData.location;
+          }
+        }
+      } else {
+        doctorContact.value = '';
+        doctorHospital.value = '';
+        doctorHospitalLocation.value = '';
+      }
+    });
+
+    // Update hospital fields when hospital selection changes
+    document.getElementById('hospitalDropdown').addEventListener('change', function() {
+      const selectedId = this.value;
+      const hospitalContact = document.getElementById('hospitalContact');
+      const hospitalLocation = document.getElementById('hospitalLocation');
+      
+      if (selectedId) {
+        const selectedHospital = hospitals.find(h => h.id == selectedId);
+        if (selectedHospital) {
+          hospitalContact.value = selectedHospital.contact;
+          hospitalLocation.value = selectedHospital.location;
+        }
+      } else {
+        hospitalContact.value = '';
+        hospitalLocation.value = '';
+      }
+    });
+
+    const weightInput = document.getElementById("bodyweight");
+    const heightInput = document.getElementById("height");
+    const bmiInput = document.getElementById("bmi");
+
+    function calculateBMI() {
+      const weight = parseFloat(weightInput.value);
+      const height = parseFloat(heightInput.value);
+      if (!isNaN(weight) && !isNaN(height) && height > 0) {
+        const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+        bmiInput.value = bmi;
+      } else {
+        bmiInput.value = "";
+      }
+    }
+
+    weightInput.addEventListener("input", calculateBMI);
+    heightInput.addEventListener("input", calculateBMI);
+
+    document.getElementById("patientForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const response = await fetch("/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json();
+      const msg = document.getElementById("responseMsg");
+      if (response.ok) {
+        msg.textContent = "✅ Data submitted successfully! PID: " + result.pid;
+        msg.className = "text-green-500";
+        this.reset();
+        bmiInput.value = "";
+      } else {
+        msg.textContent = "❌ Error: " + result.error;
+        msg.className = "text-red-500";
+      }
+    });
+  </script>
+</body>
+</html>
