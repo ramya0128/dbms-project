@@ -74,11 +74,11 @@ def submit_data():
 
         # Insert patient basic information
         cursor.execute("""
-            INSERT INTO patient (PID, fname, lname, age, dob, gender, address, contact)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO patient (PID, fname, lname, age, dob, gender, address, contact,email)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
         """, (
             pid, data.get('fname'), data.get('lname'), data.get('age'),
-            data.get('dob'), data.get('gender'), data.get('address'), data.get('contact')
+            data.get('dob'), data.get('gender'), data.get('address'), data.get('contact'),data.get('email')
         ))
 
         # Insert lifestyle factors
@@ -96,13 +96,22 @@ def submit_data():
 
         # Insert health information
         cursor.execute("""
-            INSERT INTO information (PID, bodyweight, bmi, bloodtype)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO information (PID, bodyweight, bmi, bloodtype,surgery_date,heart_block_percentage,heart_attack_type,prevattack_history,cholestrol,blood_pressure,heartrate,diabetes)
+            VALUES (%s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s)
         """, (
             pid,
             data.get('bodyweight'),
             data.get('bmi'),
-            data.get('bloodtype')
+            data.get('bloodtype'),
+            data.get('surgery_date'),
+            data.get('heart_block_percentage'),
+            data.get('heart_attack_type'),
+            data.get('prevattack_history'),
+            data.get('cholestrol'),
+            data.get('blood_pressure'),
+            data.get('heartrate'),
+            data.get('diabetes'),
+            
         ))
 
         # Insert treatment details
@@ -136,8 +145,9 @@ def submit_data():
                 DID, 
                 DCONTACT, 
                 HOSNO, 
-                HNAME
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                HNAME,
+                ename
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s,%s)
         """, (
             pid,
             preferred_hospital,  # Using the validated hospital ID
@@ -145,7 +155,8 @@ def submit_data():
             did,
             dcontact,
             data.get('HOSNO'),   # Note: uppercase to match form
-            data.get('HNAME')    # Note: uppercase to match form
+            data.get('HNAME') ,
+            data.get('ename')      # Note: uppercase to match form
         ))
 
         conn.commit()
