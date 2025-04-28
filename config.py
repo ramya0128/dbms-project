@@ -3,3 +3,4 @@ class Config:
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = 'ramya2601'
     MYSQL_DB = 'HAM'
+
