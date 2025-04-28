@@ -59,16 +59,88 @@
       resize: vertical;
     }
     select.input {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1em;
-    }
+    appearance: none;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #333; /* Dark grey text */
+    border: 1px solid #d1d1d1; /* Light grey border */
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='pink'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+select.input:hover {
+    background-color: #e0e0e0; /* Slightly darker grey on hover */
+    border-color: #d8d8d8; /* Light grey border on hover */
+}
+
+select.input:focus {
+    background-color: #fce4ec; /* Light pink when focused */
+    border-color: #f48fb1; /* Pink border on focus */
+    outline: none;
+}
+
     .readonly-input {
       background: rgba(60, 60, 60, 0.8) !important;
       color: #cccccc !important;
       cursor: not-allowed;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .modal-content {
+      background: rgba(37, 37, 37, 0.95);
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 16px;
+      width: 80%;
+      max-width: 800px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      border-left: 4px solid #dc3545;
+    }
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-modal:hover {
+      color: #fff;
+    }
+    .data-display {
+      background: rgba(60, 60, 60, 0.8);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    .data-item {
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid #444;
+    }
+    .data-label {
+      font-weight: 600;
+      color: #dc3545;
+      display: inline-block;
+      width: 180px;
+    }
+    .data-value {
+      color: #e0e0e0;
     }
   </style>
 </head>
@@ -128,6 +200,10 @@
             <label class="text-gray-300">Contact</label>
             <input type="text" name="contact" placeholder="Enter contact" class="input" />
           </div>
+          <div>
+            <label class="text-gray-300">email</label>
+            <input type="text" name="email" placeholder="Enter email" required class="input" />
+          </div>
         </div>
       </div>
 
@@ -153,12 +229,29 @@
             <span class="text-gray-300"> Drug Use</span>
           </label>
           <div>
-            <label class="text-gray-300"> Physical Activity</label>
-            <input type="text" name="physical_activity" placeholder="Describe physical activity" class="input" />
+            <label for="physical_activity">Physical Activity Level:</label>
+            <select id="physical_activity" name="physical_activity" required class="input">
+              <option value="">--Select--</option>
+              <option value="Sedentary">Sedentary (little or no exercise)</option>
+              <option value="Lightly Active">Lightly Active (light exercise/sports 1-3 days/week)</option>
+              <option value="Moderately Active">Moderately Active (moderate exercise/sports 3-5 days/week)</option>
+              <option value="Very Active">Very Active (hard exercise/sports 6-7 days/week)</option>
+              <option value="Super Active">Super Active (very hard exercise & physical job)</option>
+            </select>
+            
           </div>
           <div>
-            <label class="text-gray-300"> Diet Preferences</label>
-            <input type="text" name="diet_preferences" placeholder="Describe diet preferences" class="input" />
+            <label for="diet_preferences">Diet Preferences:</label>
+            <select id="diet_preferences" name="diet_preferences" required class="input">
+              <option value="">--Select--</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Non-Vegetarian">Non-Vegetarian</option>
+              <option value="Vegan">Vegan</option>
+              <option value="Pescatarian">Pescatarian (fish eater)</option>
+              <option value="Keto">Keto</option>
+              <option value="Other">Other</option>
+            </select>
+            
           </div>
         </div>
       </div>
@@ -172,6 +265,10 @@
           Emergency Information
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-300">Emergency Contact Name</label>
+            <input type="text" name="ename" placeholder="Enter emergency contact name" class="input" />
+          </div>
           <div>
             <label class="text-gray-300">Emergency Contact</label>
             <input type="text" name="emergency_contact" placeholder="Enter emergency contact" class="input" />
@@ -241,8 +338,80 @@
             <input type="number" step="0.01" name="bmi" placeholder="Auto-calculated" class="input bg-gray-800" id="bmi" readonly />
           </div>
           <div>
-            <label class="text-gray-300">Blood Type</label>
-            <input type="text" name="bloodtype" placeholder="Enter blood type" class="input" />
+            <label for="cholestrol">Cholesterol:</label>
+            <input type="number" id="cholestrol" name="cholestrol" min="0" max="180" required>
+            
+          </div>
+          <div>
+            <label for="bloodtype">Blood Type:</label>
+            <select name="bloodtype" id="bloodtype" required>
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            
+          </div>
+          <div>
+            <label class="text-gray-300">Blood pressure</label>
+            <input type="text" name="blood_pressure" placeholder="Enter blood pressure" class="input" />
+          </div>
+          <div>
+            <label for="diabetes">Diabetes:</label>
+            <select name="diabetes" id="diabetes" class="input">
+              <option value="None">None</option>
+              <option value="Type 1">Type 1</option>
+              <option value="Type 2">Type 2</option>
+              <option value="Gestational">Gestational</option>
+            </select>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- Cardiac Information -->
+      <div class="card">
+        <h3 class="text-2xl font-semibold text-white mb-6 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          Cardiac Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="text-gray-300">Percentage of Heart Block</label>
+            <input type="number" name="heart_block_percentage" placeholder="Enter percentage (0-100)" min="0" max="100" class="input" />
+          </div>
+          <div>
+            <label class="text-gray-300">Type of Heart Attack</label>
+            <select name="heart_attack_type" class="input">
+              <option value="">Select type</option>
+              <option value="STEMI">STEMI (ST-elevation myocardial infarction)</option>
+              <option value="NSTEMI">NSTEMI (Non-ST-elevation myocardial infarction)</option>
+              <option value="Silent">Silent Ischemia</option>
+              <option value="Coronary">Coronary Artery Spasm</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-300">Date of Surgery</label>
+            <input type="date" name="surgery_date" class="input" />
+            
+          </div>
+          <div>
+            <label class="text-gray-300">previous_attack_history</label>
+            <input type="text" name="prevattack_history" placeholder="Enter previous attack history" class="input" />
+            
+          </div>
+          <div>
+            <label class="text-gray-300">heart rate</label>
+            <input type="text" name="heartrate" placeholder="Enter heart rate" class="input" />
+            
           </div>
         </div>
       </div>
@@ -304,6 +473,17 @@
     </form>
   </div>
 
+  <!-- Modal for displaying submitted data -->
+  <div id="submittedDataModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2 class="text-2xl font-bold text-white mb-4">Submitted Patient Data</h2>
+      <div id="submittedDataDisplay" class="data-display">
+        <!-- Data will be displayed here -->
+      </div>
+    </div>
+  </div>
+
   <script>
     // Doctor data from your table
     const doctors = [
@@ -352,6 +532,87 @@
       { id: "H019", name: "Breach Candy Hospital", contact: "011-2233462", location: "Mumbai, India" },
       { id: "H020", name: "Hinduja Hospital", contact: "011-2233463", location: "Mumbai, India" }
     ];
+
+    // Modal functionality
+    const modal = document.getElementById("submittedDataModal");
+    const closeModal = document.querySelector(".close-modal");
+    
+    closeModal.addEventListener("click", function() {
+      modal.style.display = "none";
+    });
+    
+    window.addEventListener("click", function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // Function to display submitted data in modal
+    function displaySubmittedData(formData) {
+      const dataDisplay = document.getElementById("submittedDataDisplay");
+      dataDisplay.innerHTML = "";
+      
+      // Create a display object with formatted labels
+      const displayData = {
+        "Patient ID": formData.get("pid"),
+        "Name": `${formData.get("fname")} ${formData.get("lname")}`,
+        "Age": formData.get("age"),
+        "Date of Birth": formData.get("dob"),
+        "Gender": formData.get("gender"),
+        "Address": formData.get("address"),
+        "Contact": formData.get("contact"),
+        "Lifestyle Factors": [
+          formData.get("smoking_status") ? "Smoking" : null,
+          formData.get("alcohol_consumption") ? "Alcohol Consumption" : null,
+          formData.get("drug_intake") ? "Drug Use" : null
+        ].filter(Boolean).join(", ") || "None",
+        "Physical Activity": formData.get("physical_activity"),
+        "Diet Preferences": formData.get("diet_preferences"),
+        "Emergency Contact": formData.get("emergency_contact"),
+        "Preferred Hospital": hospitals.find(h => h.id === formData.get("preferredHospital"))?.name || "Not specified",
+        "Assigned Doctor": doctors.find(d => d.id == formData.get("did"))?.name || "Not specified",
+        "Doctor Contact": formData.get("DCONTACT"),
+        "Doctor's Hospital": formData.get("HNAME"),
+        "Medical Information": [
+          `Weight: ${formData.get("bodyweight")} kg`,
+          `Height: ${formData.get("height")} cm`,
+          `BMI: ${formData.get("bmi")}`,
+          `Blood Type: ${formData.get("bloodtype")}`,
+          `Cholestrol: ${formData.get("cholestrol")}`,
+          `Blood Pressure:${formData.get("blood_pressure")}`,
+          `Diabetes:${formData.get("diabetes")}`
+
+        ].join(", "),
+        "Cardiac Information": [
+          `Heart Block: ${formData.get("heart_block_percentage") || '0'}%`,
+          `Heart Attack Type: ${formData.get("heart_attack_type") || 'Not specified'}`,
+          `Surgery Date: ${formData.get("surgery_date") || 'Not specified'}`,
+           `previous heart attack history: ${formData.get("prevattack_history") || 'Not specified'}`,
+           `Heart rate:${formData.get("heartrate")}`
+        ].join(", "),
+        "Medical History": formData.get("medical_history") || "None provided",
+        "Family History": formData.get("family_history") || "None provided",
+        "Treatment Plan": formData.get("treatment_plan") || "Not specified",
+        "Monitoring Data": formData.get("monitoring_data") || "Not specified",
+        "Surgery Details": formData.get("surgery_details") || "Not specified"
+      };
+      
+      // Add each data item to the display
+      for (const [label, value] of Object.entries(displayData)) {
+        if (value) {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "data-item";
+          itemDiv.innerHTML = `
+            <span class="data-label">${label}:</span>
+            <span class="data-value">${value}</span>
+          `;
+          dataDisplay.appendChild(itemDiv);
+        }
+      }
+      
+      // Show the modal
+      modal.style.display = "block";
+    }
 
     // Populate dropdowns on page load
     document.addEventListener('DOMContentLoaded', function() {
@@ -441,6 +702,7 @@
     document.getElementById("patientForm").addEventListener("submit", async function (e) {
       e.preventDefault();
       const formData = new FormData(this);
+
       const response = await fetch("/submit", {
         method: "POST",
         body: formData
@@ -448,6 +710,7 @@
 
       const result = await response.json();
       const msg = document.getElementById("responseMsg");
+      
       if (response.ok) {
         msg.textContent = "✅ Data submitted successfully! PID: " + result.pid;
         msg.className = "text-green-500";
@@ -457,6 +720,9 @@
         msg.textContent = "❌ Error: " + result.error;
         msg.className = "text-red-500";
       }
+
+      // Display modal summary
+      displaySubmittedData(formData);
     });
   </script>
 </body>
